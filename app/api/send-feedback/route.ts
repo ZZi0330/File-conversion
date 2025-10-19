@@ -17,8 +17,8 @@ export async function POST(request: NextRequest) {
     const transporter = nodemailer.createTransport({
       service: 'qq',
       auth: {
-        user: '1127149876@qq.com', // 您的QQ邮箱
-        pass: process.env.QQ_EMAIL_PASSWORD // 需要在环境变量中设置QQ邮箱授权码
+        user: '1127149876@qq.com', 
+        pass: process.env.QQ_EMAIL_PASSWORD 
       }
     })
 

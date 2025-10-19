@@ -47,7 +47,7 @@ export default function JsonGuide() {
             <CardHeader>
                 <CardTitle className="text-lg text-slate-700 break-words flex items-center gap-2">
                     {title}
-                    {!isValid && <Badge variant="destructive" className="text-xs">式错误</Badge>}
+                    {!isValid && <Badge variant="destructive" className="text-xs">语法错误</Badge>}
                 </CardTitle>
                 <CardDescription className="text-slate-600 break-words">{description}</CardDescription>
             </CardHeader>
@@ -79,9 +79,9 @@ export default function JsonGuide() {
                                 size="sm"
                                 className="bg-white/10 border-white/20 text-white hover:bg-white/20"
                             >
-                                <a 
-                                    href="https://www.json.org/json-zh.html" 
-                                    target="_blank" 
+                                <a
+                                    href="https://www.json.org/json-zh.html"
+                                    target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center gap-2"
                                 >
