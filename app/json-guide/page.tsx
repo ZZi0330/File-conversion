@@ -10,7 +10,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 export default function JsonGuide() {
     const [copiedItems, setCopiedItems] = useState<Set<string>>(new Set());
 
-    const copyToClipboard = async (text: string, itemId: string) => {
+    const copyToClipboard = async (text: string, itemId: string, event?: React.MouseEvent) => {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
         try {
             await navigator.clipboard.writeText(text);
             setCopiedItems(prev => new Set(prev).add(itemId));
@@ -34,8 +38,8 @@ export default function JsonGuide() {
             <Button
                 size="sm"
                 variant="outline"
-                className="absolute top-2 right-2 bg-slate-800 border-slate-600 text-slate-200 hover:bg-slate-700 z-10"
-                onClick={() => copyToClipboard(children, id)}
+                className="absolute top-2 right-2 bg-white border-slate-300 text-slate-700 hover:bg-gray-50 z-10"
+                onClick={(e) => copyToClipboard(children, id, e)}
             >
                 {copiedItems.has(id) ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             </Button>

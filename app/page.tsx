@@ -8,7 +8,7 @@ const Home = () => {
   const router = useRouter()
 
   useEffect(() => {
-    router.push('/jpg-to-pdf')
+    router.push('/png-to-pdf')
   }, [router])
 
   return (

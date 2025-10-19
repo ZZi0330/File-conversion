@@ -4,9 +4,10 @@ import React, { useState, useCallback } from 'react';
 import { Copy, Download, Eye, EyeOff, Code, FileText, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface JsonField {
   key: string;
@@ -26,11 +27,11 @@ export default function JsonEditor() {
   const updateJsonOutput = useCallback(() => {
     try {
       const jsonObject: Record<string, unknown> = {};
-      
+
       jsonFields.forEach(field => {
         if (field.key.trim()) {
           let value: unknown = field.value.trim();
-          
+
           // 根据类型转换值
           switch (field.type) {
             case 'number':
@@ -57,11 +58,11 @@ export default function JsonEditor() {
               // string 类型保持原样
               break;
           }
-          
+
           jsonObject[field.key] = value;
         }
       });
-      
+
       const formattedJson = JSON.stringify(jsonObject, null, 2);
       setJsonOutput(formattedJson);
       setIsValid(true);
@@ -86,7 +87,7 @@ export default function JsonEditor() {
   };
 
   const updateField = (index: number, field: Partial<JsonField>) => {
-    const updated = jsonFields.map((f, i) => 
+    const updated = jsonFields.map((f, i) =>
       i === index ? { ...f, ...field } : f
     );
     setJsonFields(updated);
@@ -137,7 +138,7 @@ export default function JsonEditor() {
             <CardDescription className="text-slate-200">通过表单输入创建 JSON 对象，支持多种数据类型</CardDescription>
           </CardHeader>
           <CardContent>
-            
+
             {/* 表单区域 */}
             <div className="mb-8 mt-8">
               <div className="flex justify-between items-center mb-6">
@@ -173,12 +174,13 @@ export default function JsonEditor() {
                           <Label htmlFor={`key-${index}`} className="text-sm font-medium text-slate-700">
                             键名
                           </Label>
-                          <Input
+                          <Textarea
                             id={`key-${index}`}
                             value={field.key}
                             onChange={(e) => updateField(index, { key: e.target.value })}
                             placeholder="字段名"
-                            className="mt-1"
+                            className="mt-1 min-h-[40px] resize-none"
+                            rows={1}
                           />
                         </div>
 
@@ -187,23 +189,21 @@ export default function JsonEditor() {
                           <Label htmlFor={`value-${index}`} className="text-sm font-medium text-slate-700">
                             值
                           </Label>
-                          {field.type === 'object' || field.type === 'array' ? (
-                            <Textarea
-                              id={`value-${index}`}
-                              value={field.value}
-                              onChange={(e) => updateField(index, { value: e.target.value })}
-                              placeholder={field.type === 'object' ? '{"key": "value"}' : '["item1", "item2"]'}
-                              className="mt-1 min-h-[80px]"
-                            />
-                          ) : (
-                            <Input
-                              id={`value-${index}`}
-                              value={field.value}
-                              onChange={(e) => updateField(index, { value: e.target.value })}
-                              placeholder="字段值"
-                              className="mt-1"
-                            />
-                          )}
+                          <Textarea
+                            id={`value-${index}`}
+                            value={field.value}
+                            onChange={(e) => updateField(index, { value: e.target.value })}
+                            placeholder={
+                              field.type === 'object' ? '{"key": "value"}' :
+                                field.type === 'array' ? '["item1", "item2"]' :
+                                  '字段值'
+                            }
+                            className={`mt-1 resize-none ${field.type === 'object' || field.type === 'array'
+                              ? 'min-h-[80px]'
+                              : 'min-h-[40px]'
+                              }`}
+                            rows={field.type === 'object' || field.type === 'array' ? 3 : 1}
+                          />
                         </div>
 
                         {/* 类型选择 */}
@@ -211,18 +211,21 @@ export default function JsonEditor() {
                           <Label htmlFor={`type-${index}`} className="text-sm font-medium text-slate-700">
                             类型
                           </Label>
-                          <select
-                            id={`type-${index}`}
+                          <Select
                             value={field.type}
-                            onChange={(e) => updateField(index, { type: e.target.value as JsonField['type'] })}
-                            className="mt-1 w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-500"
+                            onValueChange={(value) => updateField(index, { type: value as JsonField['type'] })}
                           >
-                            <option value="string">字符串</option>
-                            <option value="number">数字</option>
-                            <option value="boolean">布尔值</option>
-                            <option value="object">对象</option>
-                            <option value="array">数组</option>
-                          </select>
+                            <SelectTrigger className="mt-1 w-full">
+                              <SelectValue placeholder="选择类型" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="string">字符串</SelectItem>
+                              <SelectItem value="number">数字</SelectItem>
+                              <SelectItem value="boolean">布尔值</SelectItem>
+                              <SelectItem value="object">对象</SelectItem>
+                              <SelectItem value="array">数组</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
 
                         {/* 删除按钮 */}
@@ -289,9 +292,8 @@ export default function JsonEditor() {
                     <Textarea
                       value={jsonOutput}
                       readOnly
-                      className={`w-full h-64 text-sm font-mono bg-white border resize-none ${
-                        isValid ? 'border-slate-300' : 'border-red-300'
-                      }`}
+                      className={`w-full h-64 text-sm font-mono bg-white border resize-none ${isValid ? 'border-slate-300' : 'border-red-300'
+                        }`}
                       placeholder="生成的 JSON 将显示在这里..."
                     />
                   ) : (
@@ -325,7 +327,7 @@ export default function JsonEditor() {
                         <li>• <strong>数组：</strong> 输入 JSON 数组格式，如 {`["item1", "item2"]`}</li>
                       </ul>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-medium text-slate-800 mb-2">操作说明：</h4>
                       <ul className="text-sm text-slate-700 space-y-1">

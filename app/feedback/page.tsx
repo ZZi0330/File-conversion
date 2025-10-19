@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Alert } from '@/components/ui/alert'
@@ -80,7 +79,7 @@ export default function FeedbackPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="name">姓名 *</Label>
-                <Input
+                <Textarea
                   id="name"
                   name="name"
                   value={formData.name}
@@ -91,10 +90,9 @@ export default function FeedbackPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">邮箱 *</Label>
-                <Input
+                <Textarea
                   id="email"
                   name="email"
-                  type="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="请输入您的邮箱"
@@ -105,7 +103,7 @@ export default function FeedbackPage() {
 
             <div className="space-y-2">
               <Label htmlFor="subject">主题 *</Label>
-              <Input
+              <Textarea
                 id="subject"
                 name="subject"
                 value={formData.subject}
@@ -148,9 +146,10 @@ export default function FeedbackPage() {
               </Alert>
             )}
 
-            <Button 
-              type="submit" 
-              className="w-full" 
+            <Button
+              type="submit"
+              className="w-full font-semibold bg-blue-100 text-black hover:bg-blue-200 border-blue-300"
+              size="lg"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -169,7 +168,7 @@ export default function FeedbackPage() {
         </CardContent>
       </Card>
 
- 
+
     </div>
   )
 }
