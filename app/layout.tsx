@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico?v=' + Date.now(),
   },
+  other: {
+    'google-adsense-account': 'ca-pub-4055015159464492',
+  },
 };
 
 
